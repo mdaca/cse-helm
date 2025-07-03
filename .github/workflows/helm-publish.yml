@@ -1,4 +1,4 @@
-ame: Update Helm Chart Release
+name: Update Helm Chart Release
 
 on:
   push:
