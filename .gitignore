@@ -1,0 +1,27 @@
+# Ignore Helm chart packages anywhere except chart/cse/
+*.tgz
+
+# But don't ignore packaged charts inside chart/cse/
+!chart/cse/*.tgz
+
+# Ignore build/ or packaged/ temp directories
+packaged/
+build/
+
+# Ignore Helm test results or temp files
+*.tmp
+*.bak
+
+# Node or Python junk (if tooling is involved)
+node_modules/
+__pycache__/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# GitHub-specific
+.env
+values-*.yaml
