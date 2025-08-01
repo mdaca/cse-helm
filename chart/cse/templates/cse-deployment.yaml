@@ -43,6 +43,15 @@ spec:
           {{- $validMounts = append $validMounts . }}
         {{- end }}
       {{- end }}
+
+      {{- /* Deduplicate volumes by name */}}
+      {{- $uniqueVolumes := dict }}
+      {{- range $validMounts }}
+        {{- if not (hasKey $uniqueVolumes .name) }}
+          {{- $_ := set $uniqueVolumes .name . }}
+        {{- end }}
+      {{- end }}
+
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -77,15 +86,15 @@ spec:
             {{- end }}
 
       volumes:
-        {{- range $validMounts }}
-        - name: {{ .name }}
-          {{- if .secret }}
+        {{- range $name, $vol := $uniqueVolumes }}
+        - name: {{ $vol.name }}
+          {{- if $vol.secret }}
           secret:
-            secretName: {{ .secret }}
-          {{- else if .configMap }}
+            secretName: {{ $vol.secret }}
+          {{- else if $vol.configMap }}
           configMap:
-            name: {{ .configMap }}
-          {{- else if .emptyDir }}
+            name: {{ $vol.configMap }}
+          {{- else if $vol.emptyDir }}
           emptyDir: {}
           {{- else }}
           emptyDir: {}
