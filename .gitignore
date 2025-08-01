@@ -1,10 +1,11 @@
-# Ignore Helm chart packages anywhere except chart/cse/
+# Ignore all Helm chart packages by default
 *.tgz
 
-# But don't ignore packaged charts inside chart/cse/
+# But don't ignore packaged charts in these locations:
 !chart/cse/*.tgz
+!package/*.tgz
 
-# Ignore build/ or packaged/ temp directories
+# Ignore build/ or packaged/ temp directories (except tgz)
 packaged/
 build/
 
@@ -22,6 +23,6 @@ Thumbs.db
 *.swp
 *.swo
 
-# GitHub-specific
+# GitHub-specific / local config
 .env
 values-*.yaml
