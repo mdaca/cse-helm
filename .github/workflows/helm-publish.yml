@@ -70,7 +70,6 @@ jobs:
 
       - name: Package Helm chart to /cse as well
         run: |
-          mkdir -p cse
           helm package chart/cse --destination cse
 
       - name: Commit and push chart changes
