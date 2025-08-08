@@ -1,10 +1,9 @@
-# Ignore all Helm chart packages by default
-*.tgz
-
 # But don't ignore packaged charts in these locations:
 !chart/cse/*.tgz
 !package/*.tgz
 !cse/*.tgz          # <-- Add this line to whitelist /cse tgz files
+# Ignore all Helm chart packages by default
+*.tgz
 # Ignore build/ or packaged/ temp directories (except tgz)
 packaged/
 build/
