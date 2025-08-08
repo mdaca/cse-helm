@@ -1,4 +1,6 @@
-{{- if .Values.cse.auth.spnego.enabled) }}
+{{- if .Values.cse.auth.spnego.enabled }}
+
+else
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -584,4 +586,4 @@ data:
         </outbound-socket-binding>
     </socket-binding-group>
     </server>
-    {{- end }}
+{{- end }}
