@@ -15,23 +15,23 @@ data:
     default_tgs_enctypes = aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha1-96
     permitted_enctypes = aes128-cts-hmac-sha1-96 aes256-cts-hmac-sha1-96
     default_realm = MED.OSD.DS
-   dns_lookup_realm = false
-   dns_lookup_kdc = false
-   rdns = false
-   ticket_lifetime = 10h
-   renew_lifetime = 7d
-   krb5_renew_interval = 10800
-   enumerate = false
-   forwardable = true
-   dns_canonicalize_hostname = true
+    dns_lookup_realm = false
+    dns_lookup_kdc = false
+    rdns = false
+    ticket_lifetime = 10h
+    renew_lifetime = 7d
+    krb5_renew_interval = 10800
+    enumerate = false
+    forwardable = true
+    dns_canonicalize_hostname = true
 
-   [realms]
-   MED.OSD.DS = {
-   kdc = DHA-MJAD-DC01.med.osd.ds
-   admin_server = DHA-MJAD-DC01.med.osd.ds
-   }
+    [realms]
+    MED.OSD.DS = {
+    kdc = DHA-MJAD-DC01.med.osd.ds
+    admin_server = DHA-MJAD-DC01.med.osd.ds
+    }
    
-   [domain_realm]
-   .med.osd.ds = MED.OSD.DS
-   med.osd.ds = MED.OSD.DS
+    [domain_realm]
+    .med.osd.ds = MED.OSD.DS
+    med.osd.ds = MED.OSD.DS
 {{- end }}
