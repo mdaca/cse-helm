@@ -3,12 +3,12 @@ entries:
   cse:
   - apiVersion: v2
     appVersion: 3.4.6
-    created: "2025-08-01T03:42:44.138267344Z"
+    created: "2025-08-08T18:24:39.366966356Z"
     description: A Helm chart for Kubernetes
-    digest: 74e3295e4b0497c854f53e7e24d8dc0f58312cf4c1de7e98cca82de45bd09ca7
+    digest: cc8190307a41da26182e4a6ebfd6bd983eb7b49a36941b1feab3c72b1dd57469
     name: cse
     type: application
     urls:
     - https://mdaca.github.io/cse-helm/package/cse-0.1.0.tgz
     version: 0.1.0
-generated: "2025-08-01T03:42:44.131710144Z"
+generated: "2025-08-08T18:24:39.361182571Z"
