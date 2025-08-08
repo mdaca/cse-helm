@@ -4,7 +4,7 @@
 # But don't ignore packaged charts in these locations:
 !chart/cse/*.tgz
 !package/*.tgz
-
+!cse/*.tgz          # <-- Add this line to whitelist /cse tgz files
 # Ignore build/ or packaged/ temp directories (except tgz)
 packaged/
 build/
