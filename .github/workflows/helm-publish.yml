@@ -68,10 +68,16 @@ jobs:
           helm package cse --destination ../package
           helm repo index ../package --url https://mdaca.github.io/cse-helm/package --merge ../package/index.yaml
 
+      - name: Package Helm chart to /cse as well
+        run: |
+          mkdir -p cse
+          helm package chart/cse --destination cse
+
       - name: Commit and push chart changes
         run: |
           git add chart/cse/Chart.yaml
           git add package/*
+          git add cse/*
           git commit -m "Update Helm chart to version $NEW_VERSION" || echo "No changes to commit"
           git push origin HEAD
 
