@@ -74,9 +74,8 @@ jobs:
 
       - name: Commit and push chart changes
         run: |
-          git add chart/cse/Chart.yaml
+          git add chart/cse/*
           git add package/*
-          git add cse/*
           git commit -m "Update Helm chart to version $NEW_VERSION" || echo "No changes to commit"
           git push origin HEAD
 
