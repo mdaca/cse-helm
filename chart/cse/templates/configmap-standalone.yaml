@@ -4,7 +4,7 @@ metadata:
   name: standalone-xml
 data:
   standalone.xml: |
-    {{- if .Values.cse.auth.spnego.enabled }}
+     {{- if (default false .Values.cse.auth.spnego.enabled) }}
     {{- /* Include your spnego-enabled standalone.xml content here */}}
     <?xml version="1.0" encoding="UTF-8"?>
 
