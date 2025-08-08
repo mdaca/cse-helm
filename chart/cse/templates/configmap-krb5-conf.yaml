@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   name: krb5.conf
 data:
-  krb5.conf.conf: |
+  krb5.conf: |
     [logging]
     default = FILE:D:/jboss-eap-8.0/standalone/log/krb5Logs/krb5libs.log
     kdc = FILE:D:/jboss-eap-8.0/standalone/log/krb5Logs/krb5kdc.log
