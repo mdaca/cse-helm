@@ -70,7 +70,7 @@ jobs:
 
       - name: Package Helm chart to /cse as well
         run: |
-          helm package chart/cse --destination cse
+          helm package chart/cse --destination chart/cse
 
       - name: Commit and push chart changes
         run: |
