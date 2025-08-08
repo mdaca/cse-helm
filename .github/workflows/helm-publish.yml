@@ -8,63 +8,75 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  update-helm-chart:
     runs-on: ubuntu-latest
 
     permissions:
       contents: write
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Get version from commit message.
-        id: get_commit_message
+      - name: Configure Git user
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Get latest Git tag version
+        id: get_version
+        run: |
+          TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "0.0.0")
+          echo "Current tag: $TAG"
+          echo "CURRENT_VERSION=$TAG" >> $GITHUB_ENV
+
+      - name: Get version bump type from commit message
+        id: determine_bump
         run: |
           COMMIT_MESSAGE=$(git log -1 --pretty=%B)
           echo "Commit message: $COMMIT_MESSAGE"
-          VERSION_TYPE=$(echo "$COMMIT_MESSAGE" | grep -oP '\[(major|minor|patch)\]' | tr -d '[]')
-          echo "VERSION_TYPE=${VERSION_TYPE:-none}" >> $GITHUB_ENV
+          BUMP_TYPE=$(echo "$COMMIT_MESSAGE" | grep -oP '\[(major|minor|patch)\]' | tr -d '[]')
+          echo "BUMP_TYPE=${BUMP_TYPE:-none}" >> $GITHUB_ENV
 
-      - name: Get branch name
-        run: |
-          CURRENT_BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
-          echo "BRANCH_NAME=$CURRENT_BRANCH" >> $GITHUB_ENV
-
-      - name: Update Helm Chart Version
+      - name: Bump version and update Chart.yaml
+        id: bump_version
         run: |
           cd chart/cse
-          CURRENT_VERSION=$(grep '^version:' Chart.yaml | awk '{print $2}')
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
-
-          if [[ "$VERSION_TYPE" != "none" ]]; then
-            if [[ "$VERSION_TYPE" == "major" ]]; then
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${CURRENT_VERSION#v}"
+          if [[ "$BUMP_TYPE" != "none" ]]; then
+            if [[ "$BUMP_TYPE" == "major" ]]; then
               MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0
-            elif [[ "$VERSION_TYPE" == "minor" ]]; then
+            elif [[ "$BUMP_TYPE" == "minor" ]]; then
               MINOR=$((MINOR + 1)); PATCH=0
-            elif [[ "$VERSION_TYPE" == "patch" ]]; then
+            elif [[ "$BUMP_TYPE" == "patch" ]]; then
               PATCH=$((PATCH + 1))
             fi
-
             NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
             sed -i "s/^version: .*/version: ${NEW_VERSION}/" Chart.yaml
-            echo "Updated chart version to $NEW_VERSION"
+            echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
           else
-            echo "No version update (version: $CURRENT_VERSION)"
+            echo "No version bump; keeping current version $CURRENT_VERSION"
+            echo "NEW_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
           fi
 
-      - name: Package and update Helm repo index
+      - name: Package Helm chart and update index.yaml
         run: |
+          mkdir -p package
           cd chart
-          helm package cse --destination cse
-          helm repo index cse --url https://mdaca.github.io/cse-helm/chart/cse --merge cse/index.yaml
+          helm package cse --destination ../package
+          helm repo index ../package --url https://mdaca.github.io/cse-helm/package --merge ../package/index.yaml
 
-      - name: Commit chart changes
+      - name: Commit and push chart changes
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git add chart/cse/*
-          git commit -m "Update Helm chart version for $BRANCH_NAME" || echo "Nothing to commit"
+          git add chart/cse/Chart.yaml
+          git add package/*
+          git commit -m "Update Helm chart to version $NEW_VERSION" || echo "No changes to commit"
+          git push origin HEAD
 
-      - name: Push changes
+      - name: Create and push git tag (if version bumped)
+        if: env.BUMP_TYPE != 'none'
         run: |
-          git push origin HEAD:$BRANCH_NAME
+          git tag -a "v$NEW_VERSION" -m "Release v$NEW_VERSION"
+          git push origin "v$NEW_VERSION"
