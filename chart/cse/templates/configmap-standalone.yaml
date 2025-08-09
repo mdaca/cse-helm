@@ -339,9 +339,16 @@ data:
                 </ldap-realm>
             </security-realms>
             <credential-security-factories>
-                <kerberos-security-factory name="krbSF" principal="HTTP/mip-mdaca-cse.med.osd.ds" path="${jboss.home.dir}/mdaca_cse.keytab"  mechanism-names="SPNEGO" obtain-kerberos-ticket="true" mechanism-oids="1.2.840.113554.1.2.2 1.3.6.1.5.5.2" debug="true"/>
-            </credential-security-factories>
-            <mappers>
+            <kerberos-security-factory
+             name="krbSF"
+             principal="${env.KEYTAB_PRINCIPAL:HTTP/mip-mdaca-cse.med.osd.ds}"
+             path="${jboss.home.dir}/${env.KRB5_KEYTAB_NAME:mdaca_cse.keytab}"
+             mechanism-names="SPNEGO"
+             obtain-kerberos-ticket="true"
+             mechanism-oids="1.2.840.113554.1.2.2 1.3.6.1.5.5.2"
+             debug="true"/>
+             </credential-security-factories>
+             <mappers>
                 <simple-permission-mapper name="default-permission-mapper" mapping-mode="first">
                     <permission-mapping>
                         <principal name="anonymous"/>
