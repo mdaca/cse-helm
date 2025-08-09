@@ -199,6 +199,7 @@ data:
         <subsystem xmlns="urn:jboss:domain:bean-validation:1.0"/>
         <subsystem xmlns="urn:jboss:domain:core-management:1.0"/>
         <subsystem xmlns="urn:jboss:domain:datasources:7.2">
+            <datasources>
             <datasource jndi-name="java:jboss/datasources/storexpDS" pool-name="storexpDS" enabled="true" use-java-context="true">
                     <connection-url>jdbc:postgresql://${DB_HOST:host.docker.internal}:${DB_PORT:5432}/${DB_NAME:storexp}?createDatabaseIfNotExist=true</connection-url>
                     <driver>postgresql</driver>
