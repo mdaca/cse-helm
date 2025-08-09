@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: standalone-xml
+  name: standalone.xml
 data:
   standalone.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
